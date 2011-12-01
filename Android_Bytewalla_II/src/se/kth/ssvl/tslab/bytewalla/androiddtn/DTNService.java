@@ -178,7 +178,7 @@ public class DTNService extends android.app.Service {
 		// create a HashMap for timer_tasks_map_
     	timer_tasks_map_ = new HashMap<VirtualTimerTask,TimerTask>();
     	//File file = new File(getResources().getString(R.string.DTNConfigFilePath));
-    	DTNConfiguration config_ = DTNConfigurationParser.parse_config_file(openFileInput(getResources().getString(R.string.DTNConfigFilePath)));
+    	DTNConfiguration config_ = DTNConfigurationParser.parse_config_file(openFileInput(getResources().getString(R.string.DTNConfigFilePath)), getContentResolver());
     	//DTNConfiguration config_ = DTNConfigurationParser.parse_config_file(new FileInputStream(file));
     
     	

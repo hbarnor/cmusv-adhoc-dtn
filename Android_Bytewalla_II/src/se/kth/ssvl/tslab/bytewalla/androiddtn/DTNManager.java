@@ -885,7 +885,7 @@ public class DTNManager extends Activity  {
 		//File file = new File(getResources().getString(R.string.DTNConfigFilePath));
 		//InputStream in = new FileInputStream(file);
 		
-		dtn_config_ = DTNConfigurationParser.parse_config_file(in);
+		dtn_config_ = DTNConfigurationParser.parse_config_file(in, getContentResolver());
 
 		startService(DTNServer_intent_);
 

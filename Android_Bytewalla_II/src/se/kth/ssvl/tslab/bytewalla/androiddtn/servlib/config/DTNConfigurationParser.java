@@ -30,6 +30,9 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import android.content.ContentResolver;
+import android.provider.Settings.Secure;
+
 import se.kth.ssvl.tslab.bytewalla.androiddtn.servlib.config.DiscoveriesSetting.AnnounceEntry;
 import se.kth.ssvl.tslab.bytewalla.androiddtn.servlib.config.DiscoveriesSetting.DiscoveryEntry;
 import se.kth.ssvl.tslab.bytewalla.androiddtn.servlib.config.DiscoveriesSetting.address_family_t;
@@ -112,6 +115,18 @@ public class DTNConfigurationParser {
 	 */
 	public static DTNConfiguration parse_config_file(InputStream xml_stream) throws InvalidDTNConfigurationException 
 	{
+		return parse_config_file(xml_stream, null);
+	}
+	
+	/**
+	 * Main routine for parsing XML Configuration file input stream
+	 * @param xml_stream the input stream of xml configuration file
+	 * @param content_resolver the content resolver from the application context
+	 * @return the result DTNConfiguration object filled with data from the stream
+	 * @throws InvalidDTNConfigurationException
+	 */
+	public static DTNConfiguration parse_config_file(InputStream xml_stream, ContentResolver resolver) throws InvalidDTNConfigurationException 
+	{
 		 DTNConfiguration config_ = new DTNConfiguration();
 		 DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 	       
@@ -128,7 +143,7 @@ public class DTNConfigurationParser {
 	            	{
 	            		if (configurationNodes.item(i).getNodeType() == Node.ELEMENT_NODE)
 	            		{
-	            			process_config_element((Element) configurationNodes.item(i), config_);
+	            			process_config_element((Element) configurationNodes.item(i), config_, resolver);
 	            		}
 	            		
 	            	}
@@ -150,7 +165,7 @@ public class DTNConfigurationParser {
 	 * @param config the configuration file we will put output on
 	 * @throws Exception
 	 */
-	private static void process_config_element(Element config_element, DTNConfiguration config ) throws Exception
+	private static void process_config_element(Element config_element, DTNConfiguration config, ContentResolver content_resolver ) throws Exception
 	{
 		if ( config_element.getTagName().equals(StorageSettingTagName))
 		{
@@ -171,7 +186,7 @@ public class DTNConfigurationParser {
 		
 		else if ( config_element.getTagName().equals(RoutesSettingTagName))
 		{
-			process_routes_config(config_element, config);
+			process_routes_config(config_element, config, content_resolver);
 			return;	
 		}
 		
@@ -319,7 +334,7 @@ public class DTNConfigurationParser {
 	 * @param config the configuration file we will put output on
 	 * @throws InvalidDTNConfigurationException
 	 */
-	private static void process_routes_config(Element config_element, DTNConfiguration config) throws InvalidDTNConfigurationException
+	private static void process_routes_config(Element config_element, DTNConfiguration config, ContentResolver contentResolver) throws InvalidDTNConfigurationException
 	{
 		NodeList childNodes = config_element.getChildNodes();
 		
@@ -339,7 +354,19 @@ public class DTNConfigurationParser {
 		
 		if (local_eid!=null)
 		{
-			config.routes_setting().set_local_eid(local_eid.getValue());
+			// Detect parameters that need to be expanded. 
+			// For now, only android_id is supported
+			String local_eid_value = local_eid.getValue();
+			if (local_eid_value.contains("$["))
+			{
+				String android_id = Secure.getString(contentResolver, Secure.ANDROID_ID);
+				if (null == android_id)
+				{
+					android_id = "";
+				}
+				local_eid_value = local_eid_value.replace("$[ANDROID_ID]", android_id);
+			}
+			config.routes_setting().set_local_eid(local_eid_value);
 		}
 		else
 		{

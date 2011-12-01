@@ -194,7 +194,8 @@ public class DTNSendMediatorService extends IntentService {
 					.d(TAG, "Setting destination to "
 							+ Constants.STATIC_GATEWAY_EID);
 			// set the source EID from the bundle Daemon
-			spec.set_source(getLocalEid("geocam"));
+			// spec.set_source(getLocalEid("geocam"));
+			spec.set_source(new DTNEndpointID(BundleDaemon.getInstance().local_eid().toString()));
 			spec.set_expiration(Constants.BUNDLE_EXPIRATION);
 			Log.d(TAG, "Set bundle expiration to "
 					+ Constants.BUNDLE_EXPIRATION);
@@ -215,13 +216,13 @@ public class DTNSendMediatorService extends IntentService {
 
 			// register for receipts
 			//String srcEid = BundleDaemon.getInstance().local_eid().toString();
-			String srcEid = getLocalEid("geocam").toString();
-			Intent registration = new Intent(
-					Constants.ACTION_REGISTER_WITH_RECEIVE_SERVICE);
-			android.os.Bundle destEidBundle = new android.os.Bundle();
-			destEidBundle.putString(Constants.DTN_DEST_EID_KEY, srcEid);
-			registration.putExtra(Constants.DTN_DEST_EID_KEY, destEidBundle);
-			startService(registration);
+//			String srcEid = getLocalEid("geocam").toString();
+//			Intent registration = new Intent(
+//					Constants.ACTION_REGISTER_WITH_RECEIVE_SERVICE);
+//			android.os.Bundle destEidBundle = new android.os.Bundle();
+//			destEidBundle.putString(Constants.DTN_DEST_EID_KEY, srcEid);
+//			registration.putExtra(Constants.DTN_DEST_EID_KEY, destEidBundle);
+//			startService(registration);
 
 			// If the API fail to execute throw the exception so user interface
 			// can catch and notify users
