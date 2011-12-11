@@ -28,13 +28,13 @@
 	<!--  Links Section -->
 	<tns:LinksSetting>
 		<!--  Setup your links here -->
-		<tns:Link id="android1_tcp" conv_layer_type="tcp" dest="192.168.5.100:4556"
+		<tns:Link id="android1_tcp" conv_layer_type="tcp" dest="192.168.5.101:4556"
 			type="ONDEMAND" />
 		<tns:Link id="android2_tcp" conv_layer_type="tcp" dest="192.168.5.1:4556"
 			type="ONDEMAND" />
 		<tns:Link id="ace1_tcp" conv_layer_type="tcp" dest="192.168.1.1:4556"
 			type="ONDEMAND" />
-		<tns:Link id="ace2_tcp" conv_layer_type="tcp" dest="192.168.2.1:4556"
+		<tns:Link id="ace2_tcp" conv_layer_type="tcp" dest="192.168.5.100:4556"
 			type="ONDEMAND" />
 		<!-- tns:Link id="gw_tcp" conv_layer_type="tcp" dest="192.168.5.101:4556"
 			type="ONDEMAND" /-->
@@ -55,8 +55,8 @@
 		<tns:Route dest="dtn://staticgw.dtn/*" link_id="ace2_tcp" />
 		<!-- tns:Route dest="dtn://staticgw.dtn/*" link_id="d1_tcp" /-->
 		<tns:Route dest="dtn://staticgw.dtn/*" link_id="android2_tcp" />
-		<tns:Route dest="dtn://android1.dtn/*" link_id="android1_tcp" />
-		<tns:Route dest="dtn://android2.dtn/*" link_id="android2_tcp" />
+		<!-- tns:Route dest="dtn://android1.dtn/*" link_id="android1_tcp" /-->
+		<!-- tns:Route dest="dtn://android2.dtn/*" link_id="android2_tcp" /-->
 	</tns:RoutesSetting>
 
 
